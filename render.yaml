@@ -1,0 +1,32 @@
+databases:
+  - name: budget-tracker-db
+    databaseName: budget_tracker
+    user: budget_tracker
+    plan: free
+
+services:
+  - type: web
+    name: budget-tracker-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: budget-tracker-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: ENABLE_DOCS
+        value: "false"
+      - key: CORS_ORIGINS
+        value: https://your-frontend.example.com
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
